@@ -1,0 +1,55 @@
+0 0.1  Set up parameters in init.ora file (default location for init.ora file is:  %ORACLE_HOME%\DATABASE)
+1        query_rewrite_enabled  = true
+2        query_rewrite_integrity = trusted
+3 ===========
+4 0.2  Connect to SQL*Plus 
+5        C:\>sqlplus /nolog
+6 
+7 0.3 connect as sys
+8       SQL> connect sys/sys@xeltest AS SYSDBA
+9 
+10 0.4 Restart the database, as follows:
+11       SQL>shutdown immediate
+12       SQL>startup
+13 ============
+14 0.5 Create a tablespace
+15       SQL> CREATE TABLESPACE hbos_tb DATAFILE 'C:\oracle\xldata\hbos_tb.dbf' SIZE 256M; 
+16 CREATE TABLESPACE hbos_tb DATAFILE 'C:\oracle\xldata\hbos_tb.dbf' SIZE 256M; 
+17 CREATE TABLESPACE xeldb DATAFILE 'C:\oracle\xldata\xeldb_tb.dbf' SIZE 1024M; 
+18 alter TABLESPACE xeldb add DATAFILE 'C:\oracle\xldata\xeldb_tb_1.dbf' SIZE 1024M; 
+19 alter TABLESPACE xeldb add DATAFILE 'C:\oracle\xldata\xeldb_tb_2.dbf' SIZE 1024M;
+20 alter TABLESPACE xeldb add DATAFILE 'C:\oracle\xldata\xeldb_tb_3.dbf' SIZE 1024M;
+21 alter TABLESPACE xeldb add DATAFILE 'C:\oracle\xldata\xeldb_tb_4.dbf' SIZE 1024M;
+22 alter TABLESPACE xeldb add DATAFILE 'C:\oracle\xldata\xeldb_tb_5.dbf' SIZE 1024M;
+23 
+24 CREATE TABLESPACE thor_data DATAFILE 'C:\oracle\xldata\thor_data_tb.dbf' SIZE 512M; 
+25 
+26 ============
+27 0.9 Drop user
+28       SQL> drop user hbosuser cascade;
+29 
+30 =========
+31 
+32 1.0 Create hbosuser user
+33       SQL> CREATE USER hbosuser IDENTIFIED BY hbosuser DEFAULT TABLESPACE hbos_tb TEMPORARY TABLESPACE temp QUOTA UNLIMITED ON hbos_tb;
+34 
+35       SQL> GRANT connect, resource, query rewrite TO hbosuser;
+36 ============
+37 
+38 @C:\ora920\rdbms\admin\dbmspool.sql
+39 
+40 GRANT EXECUTE ON sys.dbms_shared_pool to hbosuser;
+41 
+42 ==============
+43 Install the Xellerate Database Schema
+44 To load the Xellerate database schema, please continue to the Installing Xellerate section on page 10.
+45         Important: Once you install the database schema, you must return to this section, and continue with Step 7. 
+46 
+47 From Oracle Sql*Plus (the Client tool), connect as SYSDBA, using the sys user.
+48 C:\>sqlplus /nolog
+49 
+50 SQL> connect sys/sys@xeltest AS SYSDBA
+51 Connected.
+52 
+53 Run the create_db_trigger.sql script.  This file can be found on the Xellerate Installation CD.
+54 

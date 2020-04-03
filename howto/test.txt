@@ -1,0 +1,55 @@
+0.1  Set up parameters in init.ora file (default location for init.ora file is:  %ORACLE_HOME%\DATABASE)
+       query_rewrite_enabled  = true
+       query_rewrite_integrity = trusted
+===========
+0.2  Connect to SQL*Plus 
+       C:\>sqlplus /nolog
+
+0.3 connect as sys
+      SQL> connect sys/sys@xeltest AS SYSDBA
+
+0.4 Restart the database, as follows:
+      SQL>shutdown immediate
+      SQL>startup
+============
+0.5 Create a tablespace
+      SQL> CREATE TABLESPACE hbos_tb DATAFILE 'C:\oracle\xldata\hbos_tb.dbf' SIZE 256M; 
+CREATE TABLESPACE hbos_tb DATAFILE 'C:\oracle\xldata\hbos_tb.dbf' SIZE 256M; 
+CREATE TABLESPACE xeldb DATAFILE 'C:\oracle\xldata\xeldb_tb.dbf' SIZE 1024M; 
+alter TABLESPACE xeldb add DATAFILE 'C:\oracle\xldata\xeldb_tb_1.dbf' SIZE 1024M; 
+alter TABLESPACE xeldb add DATAFILE 'C:\oracle\xldata\xeldb_tb_2.dbf' SIZE 1024M;
+alter TABLESPACE xeldb add DATAFILE 'C:\oracle\xldata\xeldb_tb_3.dbf' SIZE 1024M;
+alter TABLESPACE xeldb add DATAFILE 'C:\oracle\xldata\xeldb_tb_4.dbf' SIZE 1024M;
+alter TABLESPACE xeldb add DATAFILE 'C:\oracle\xldata\xeldb_tb_5.dbf' SIZE 1024M;
+
+CREATE TABLESPACE thor_data DATAFILE 'C:\oracle\xldata\thor_data_tb.dbf' SIZE 512M; 
+
+============
+0.9 Drop user
+      SQL> drop user hbosuser cascade;
+
+=========
+
+1.0 Create hbosuser user
+      SQL> CREATE USER hbosuser IDENTIFIED BY hbosuser DEFAULT TABLESPACE hbos_tb TEMPORARY TABLESPACE temp QUOTA UNLIMITED ON hbos_tb;
+
+      SQL> GRANT connect, resource, query rewrite TO hbosuser;
+============
+
+@C:\ora920\rdbms\admin\dbmspool.sql
+
+GRANT EXECUTE ON sys.dbms_shared_pool to hbosuser;
+
+==============
+Install the Xellerate Database Schema
+To load the Xellerate database schema, please continue to the Installing Xellerate section on page 10.
+        Important: Once you install the database schema, you must return to this section, and continue with Step 7. 
+
+From Oracle Sql*Plus (the Client tool), connect as SYSDBA, using the sys user.
+C:\>sqlplus /nolog
+
+SQL> connect sys/sys@xeltest AS SYSDBA
+Connected.
+
+Run the create_db_trigger.sql script.  This file can be found on the Xellerate Installation CD.
+
